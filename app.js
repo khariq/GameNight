@@ -1,5 +1,5 @@
 'use strict';
-
+const config = require('config');
 const express = require('express');
 const app = express();
 const { resolve } = require('path');
@@ -8,6 +8,26 @@ const server = require('./server');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const chalk = require('chalk');
+const passport = require('passport');
+const facebookPassportStrategy = require('passport-facebook').Strategy;
+
+passport.use(
+  new facebookPassportStrategy({
+    clientID: config.get("passport.facebook.clientId"),
+    clientSecret: config.get("passport.facebook.clientSecret"),
+    callbackURL: config.get("passport.facebook.callback")
+  }, 
+  function(accessToken, refreshToken, profile, done) {
+    const User = require('./db/models/user');
+    profile.emails.forEach(email => {
+      User.find({emailAddress: email}).then(function(err, user){
+        if (!err) {
+          done(null, user);
+        }
+      })
+    });
+    
+  }));
 
 // logging middleware
 app.use(morgan('dev'));
@@ -18,6 +38,9 @@ app.use(bodyParser.json());
 
 // prepend '/api' to URIs
 app.use('/api', server);
+
+app.get('/auth/facebook', passport.authenticate('facebook'));
+app.get(config.get("passport.facebook.callback"), passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/login'}));
 
 // serve static files from public
 app.use(express.static(resolve(__dirname, 'public')))

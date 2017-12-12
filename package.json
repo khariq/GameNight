@@ -30,6 +30,8 @@
     "body-parser": "^1.17.1",
     "config": "^1.28.1",
     "express": "^4.15.2",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
     "pg": "^7.3.0",
     "pg-hstore": "^2.3.2",
     "react-router-dom": "^4.1.1",
