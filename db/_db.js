@@ -15,7 +15,8 @@ const db = new Sequelize(
 		host: host,
 		dialectOptions: {
 			encrypt : true
-		}
+		},
+		operatorAliases: false
 	}
 );
 

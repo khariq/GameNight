@@ -9,25 +9,25 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const chalk = require('chalk');
 const passport = require('passport');
-const facebookPassportStrategy = require('passport-facebook').Strategy;
+const session = require('express-session')
+const RedisStore = require('connect-redis')(session)
 
-passport.use(
-  new facebookPassportStrategy({
-    clientID: config.get("passport.facebook.clientId"),
-    clientSecret: config.get("passport.facebook.clientSecret"),
-    callbackURL: config.get("passport.facebook.callback")
-  }, 
-  function(accessToken, refreshToken, profile, done) {
-    const User = require('./db/models/user');
-    profile.emails.forEach(email => {
-      User.find({emailAddress: email}).then(function(err, user){
-        if (!err) {
-          done(null, user);
-        }
-      })
-    });
-    
-  }));
+const auth = require('./server/auth/Facebook');
+
+app.use(session({
+  store: new RedisStore({
+    url: config.redis.url
+  }),
+  secret: config.redis.secret,
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+
+auth(app, passport, session);
+
+ app.use(passport.session());
 
 // logging middleware
 app.use(morgan('dev'));
@@ -38,9 +38,6 @@ app.use(bodyParser.json());
 
 // prepend '/api' to URIs
 app.use('/api', server);
-
-app.get('/auth/facebook', passport.authenticate('facebook'));
-app.get(config.get("passport.facebook.callback"), passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/login'}));
 
 // serve static files from public
 app.use(express.static(resolve(__dirname, 'public')))
