@@ -14,20 +14,12 @@ const RedisStore = require('connect-redis')(session)
 
 const auth = require('./server/auth/Facebook');
 
-app.use(session({
-  store: new RedisStore({
-    url: config.redis.url
-  }),
-  secret: config.redis.secret,
-  resave: false,
-  saveUninitialized: false
-}));
-
-app.use(passport.initialize());
-
 auth(app, passport, session);
 
- app.use(passport.session());
+app.use(function printSession(req, res, next) {
+  console.log('req.session', req.session);
+  return next();
+});
 
 // logging middleware
 app.use(morgan('dev'));
