@@ -7,7 +7,15 @@ const Op = Sequelize.Op;
 const Game = require('../../db/models/game');
 
 router.get('/Library', function(req, res, next) {
+
+    var credentials = req.he
+
   Game.findAll({
+    where: {
+      Name : {
+        [Op.like]: 'twilight%'
+      }
+    }
   })
   .then(all => {
     console.log(all)

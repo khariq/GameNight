@@ -27,13 +27,13 @@ export default class MainMenu extends React.Component<IMainMenuProperties, IMain
 	}
 
 	public componentDidMount() {
-
 		var self = this;
-		fetch('/api/User/Email', { credentials: 'include' })
+		fetch('/auth/User')
 		.then(function (response: Response) {
 			response
-			  .text()
-			  .then(function (userEmail) {					
+			  .json()
+			  .then(function (user) {			
+				var userEmail = user.email;		
 				var loggedIn: boolean = (userEmail == null || userEmail == '') == false;
 
 				self.setState({
