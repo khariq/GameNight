@@ -28,7 +28,7 @@ export default class MainMenu extends React.Component<IMainMenuProperties, IMain
 
 	public componentDidMount() {
 		var self = this;
-		fetch('/auth/User')
+		fetch('/auth/User', { credentials: 'include'})
 		.then(function (response: Response) {
 			response
 			  .json()

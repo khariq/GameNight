@@ -39,7 +39,7 @@ export class LoginModal extends React.Component<{}, {}> {
 								<Button icon='facebook' color='facebook' content='Sign in with Facebook' as='a' href='/auth/facebook' />
 							</Segment>
 							<Segment vertical>
-								<Image src='/third-party/google/btn_google_signin_light_normal_web.png' as='a' href='/Security/ChallengeProvider/Google' />
+								<Image src='/third-party/google/btn_google_signin_light_normal_web.png' as='a' href='/auth/google' />
 							</Segment>
 						</Segment.Group>
 						<Message>
