@@ -24,7 +24,7 @@ authRouter
     }));
 
 authRouter
-    .route(config.get('passport.facebook.callback'))
+    .route('/facebook/callback')
     .get(passport.authenticate('facebook', {
         successRedirect: '/',
         failure: '/'

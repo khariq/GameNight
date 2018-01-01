@@ -1,21 +1,25 @@
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const config = require('config');
 var passport = require('passport');
+var User = require('../../../db/models/user');
 
 module.exports = function() {
     passport.use(new GoogleStrategy({
-            clientID: '46468617510-1mkpudikj23onqkpkha96qsopmj344ql.apps.googleusercontent.com',
-            clientSecret: 'g1yR0hHvN4RpUZUQlRFtcQ-H',
-            callbackURL: 'http://localhost:3000/auth/google/callback'
+            clientID: '46468617510-nafqhb33liit72mvpnhgcvgsm0re6g0q.apps.googleusercontent.com',
+            clientSecret: 'Sdz5ei401zSZW2-ZZmwWL6_P',
+            callbackURL: `${config.get("server.baseUrl")}/auth/google/callback`
         },
         function(accessToken, refreshToken, profile, done){
             
             console.log(`${JSON.stringify(profile)} received from Google`)
-            var user = {};
-            user.email = profile.emails[0].value;
-            user.displayName = `${profile.name.givenName} ${profile.name.familyName}`;
-            done(null, user);
-            done(null, user);
+            var email = profile.emails[0].value;
+
+            var user = User.findOrCreate({
+                where: {
+                    emailAddress: email
+                }});
+
+            done(null, user[0]);
         }
     ));
 }

@@ -3,13 +3,13 @@
 const Sequelize = require('sequelize');
 const db = require('../_db.js');
 
-const User = db.define('users', {  
-  Id : {
+const User = db.define('users', {
+  Id: {
     type: Sequelize.INTEGER,
     allowNull: false,
     defaultValue: false,
     primaryKey: true
-   },
+  },
   emailAddress: {
     type: Sequelize.STRING,
     unique: true,
