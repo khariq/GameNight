@@ -1,5 +1,0 @@
-﻿CREATE TABLE [GameNight].[Users]
-(
-	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
-    [EmailAddress] NVARCHAR(500) NOT NULL 
-)

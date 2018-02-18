@@ -1,5 +1,0 @@
-﻿CREATE TABLE [GameNight].[Genres]
-(
-	[Id] INT NOT NULL PRIMARY KEY, 
-    [Name] NVARCHAR(255) NOT NULL
-)
